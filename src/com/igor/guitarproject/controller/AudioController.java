@@ -6,6 +6,7 @@ import com.igor.guitarproject.audio.SpeakerOutputEngine;
 public class AudioController {
 
 	private MainController main_c;
+	private EffectsController effects_c;
 	
 	// Audio Setup.
 	private float sample_rate = 44100.0f;
@@ -24,9 +25,11 @@ public class AudioController {
 	public AudioController(MainController main_c) {
 		this.main_c = main_c;
 		
+		effects_c = new EffectsController(this);
+		
 		System.out.println("Opening Audio Interfaces.");
 		mic_input_engine = new MicrophoneInputEngine(this);
-		speaker_output_engine = new SpeakerOutputEngine(this);
+		speaker_output_engine = new SpeakerOutputEngine(this, effects_c);
 	}
 	
 	public void startStream() {
@@ -72,5 +75,9 @@ public class AudioController {
 
 	public SpeakerOutputEngine getSpeakerOutputEngine() {
 		return speaker_output_engine;
+	}
+
+	public EffectsController getEffectsController() {
+		return effects_c;
 	}
 }

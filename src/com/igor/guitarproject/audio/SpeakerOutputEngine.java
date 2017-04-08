@@ -9,15 +9,18 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 import com.igor.guitarproject.controller.AudioController;
+import com.igor.guitarproject.controller.EffectsController;
 
 public class SpeakerOutputEngine {
 
 	private AudioController audio_c;
+	private EffectsController effects_c;
 	private SourceDataLine speaker_line;
 	private AudioFormat speaker_format;
 	
-	public SpeakerOutputEngine(AudioController audio_c) {
+	public SpeakerOutputEngine(AudioController audio_c, EffectsController effects_c) {
 		this.audio_c = audio_c;
+		this.effects_c = effects_c;
 		
 		try {
 			speaker_format = new AudioFormat(audio_c.getSampleRate(), audio_c.getSampleSizeInBits(), audio_c.getChannels(), audio_c.isSignData(), audio_c.isBigEndian());
@@ -30,6 +33,13 @@ public class SpeakerOutputEngine {
 	}
 	
 	public void playSample(short sample) {
+		short[] signal = {sample};
+		
+		if(effects_c.isEffectActive()) {
+			signal = effects_c.getCurrentEffect().applyEffect(signal, signal.length);
+		}
+		
+		sample = signal[0];
 		
 		byte[] output_buffer = new byte[audio_c.getReadLength()];
 		ByteBuffer bb = ByteBuffer.allocate(2);
