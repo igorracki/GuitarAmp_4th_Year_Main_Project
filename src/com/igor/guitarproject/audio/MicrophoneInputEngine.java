@@ -46,12 +46,12 @@ public class MicrophoneInputEngine implements Runnable {
 			short[] audio = new short[amount_read/2];
 			int i = 0;
 			while(i < amount_read-2) {
-				 ByteBuffer bb = ByteBuffer.allocate(2);
-            	 bb.order(ByteOrder.LITTLE_ENDIAN);
-            	 bb.put(data[i]);
-            	 bb.put(data[i+1]);
-            	 audio[(i/2)] = bb.getShort(0);
-            	 i += 2;
+				ByteBuffer bb = ByteBuffer.allocate(2);
+            	 		bb.order(ByteOrder.LITTLE_ENDIAN);
+            	 		bb.put(data[i]);
+            	 		bb.put(data[i+1]);
+            	 		audio[(i/2)] = bb.getShort(0);
+            	 		i += 2;
 			}
 			
 			audio_c.getSpeakerOutputEngine().playSignal(audio);
