@@ -32,21 +32,23 @@ public class SpeakerOutputEngine {
 		}
 	}
 	
-	public void playSample(short sample) {
-		short[] signal = {sample};
+	public void playSignal(short[] signal) {
 		
 		if(effects_c.isEffectActive()) {
 			signal = effects_c.getCurrentEffect().applyEffect(signal, signal.length);
 		}
 		
-		sample = signal[0];
-		
 		byte[] output_buffer = new byte[audio_c.getReadLength()];
-		ByteBuffer bb = ByteBuffer.allocate(2);
-		bb.order(ByteOrder.LITTLE_ENDIAN);
-		bb.putShort(sample);
-		output_buffer[0] = bb.get(0);
-		output_buffer[1] = bb.get(1);
+
+		int i = 0;
+		while(i <= audio_c.getReadLength()-1) {
+			ByteBuffer bb = ByteBuffer.allocate(2);
+			bb.order(ByteOrder.LITTLE_ENDIAN);
+			bb.putShort(signal[i/2]);
+			output_buffer[i] = bb.get(0);
+			output_buffer[i+1] = bb.get(1);
+			i += 2;
+		}
 		
 		speaker_line.write(output_buffer, 0, output_buffer.length);
 	}

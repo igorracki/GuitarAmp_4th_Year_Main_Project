@@ -15,7 +15,8 @@ public class AudioController {
 	private boolean sign_data = true;
 	private boolean big_endian = false;
 	private int buffer_size = 4096;
-	private int read_length = 2;
+//	private int read_length = 2;
+	private int read_length = 408;
 	
 	// Audio Engines.
 	private MicrophoneInputEngine mic_input_engine;
