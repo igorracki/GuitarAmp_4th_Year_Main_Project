@@ -1,5 +1,6 @@
 package com.igor.guitarproject.controller;
 
+import com.igor.guitarproject.processor.Delay;
 import com.igor.guitarproject.processor.Effect;
 import com.igor.guitarproject.processor.Overdrive;
 
@@ -9,6 +10,8 @@ public class EffectsController {
 	
 	// Parameters for effects.
 	private double drive;
+	private int delay_length;
+	private double delay_feedback;
 	
 	// Effects.
 	private Effect current_effect;
@@ -32,6 +35,7 @@ public class EffectsController {
 	public void setCurrentEffect(String effect) {
 		switch(effect) {
 			case "overdrive": current_effect = new Overdrive(drive); break;
+			case "delay": current_effect = new Delay(delay_length, delay_feedback); break;
 			case "none": current_effect = null;
 			default: current_effect = null;
 		}
@@ -48,5 +52,31 @@ public class EffectsController {
 			this.drive = 0.99;
 		else
 			this.drive = drive;
+	}
+
+	public int getDelayLength() {
+		return delay_length;
+	}
+
+	public void setDelayLength(int delay_length) {
+		if(delay_length < 0)
+			delay_length = 0;
+		else if(delay_length > 10)
+			delay_length = Short.MAX_VALUE;
+		else
+			this.delay_length = (Short.MAX_VALUE / 10) * delay_length;
+	}
+
+	public double getDelayFeedback() {
+		return delay_feedback;
+	}
+
+	public void setDelayFeedback(double delay_feedback) {
+		if(delay_feedback < 0)
+			delay_feedback = 0;
+		else if(delay_feedback > 1)
+			delay_feedback = 1;
+		else
+			this.delay_feedback = delay_feedback;
 	}
 }

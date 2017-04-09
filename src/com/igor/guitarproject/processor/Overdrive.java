@@ -13,9 +13,9 @@ public class Overdrive implements Effect {
 	}
 
 	@Override
-	public short[] applyEffect(short[] signal, int signal_size) {
+	public short[] applyEffect(short[] signal) {
 		if(drive != 0) {
-			for(int i = 0; i < signal_size; i++) {
+			for(int i = 0; i < signal.length; i++) {
 				x = (double)(signal[i]) / Short.MAX_VALUE;
 				a = Math.sin(drive * Math.PI / 2);
 				k = 2 * a / (1 - a);

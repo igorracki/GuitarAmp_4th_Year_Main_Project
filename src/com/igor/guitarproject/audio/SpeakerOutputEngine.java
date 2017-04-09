@@ -35,7 +35,7 @@ public class SpeakerOutputEngine {
 	public void playSignal(short[] signal) {
 		
 		if(effects_c.isEffectActive()) {
-			signal = effects_c.getCurrentEffect().applyEffect(signal, signal.length);
+			signal = effects_c.getCurrentEffect().applyEffect(signal);
 		}
 		
 		byte[] output_buffer = new byte[audio_c.getReadLength()];
