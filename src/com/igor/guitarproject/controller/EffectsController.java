@@ -2,6 +2,7 @@ package com.igor.guitarproject.controller;
 
 import com.igor.guitarproject.processor.Delay;
 import com.igor.guitarproject.processor.Effect;
+import com.igor.guitarproject.processor.FFTLowPassFilter;
 import com.igor.guitarproject.processor.Overdrive;
 
 public class EffectsController {
@@ -12,9 +13,12 @@ public class EffectsController {
 	private double drive;
 	private int delay_length;
 	private double delay_feedback;
+	private double low_pass;
+	private double frequency;
 	
 	// Effects.
 	private Effect current_effect;
+	private Effect filter_effect;
 	
 	public EffectsController(AudioController audio_c) {
 		this.audio_c = audio_c;
@@ -26,10 +30,21 @@ public class EffectsController {
 		else
 			return true;
 	}
+	
+	public boolean isFilterActive() {
+		if(filter_effect == null)
+			return false;
+		else
+			return true;
+	}
 
 	/*********************** 	GETTERS & SETTERS 	***********************/
 	public Effect getCurrentEffect() {
 		return current_effect;
+	}
+	
+	public Effect getCurrentFilter() {
+		return filter_effect;
 	}
 	
 	public void setCurrentEffect(String effect) {
@@ -38,6 +53,14 @@ public class EffectsController {
 			case "delay": current_effect = new Delay(delay_length, delay_feedback); break;
 			case "none": current_effect = null;
 			default: current_effect = null;
+		}
+	}
+	
+	public void setCurrentFilter(String filter) {
+		switch(filter) {
+			case "lowpass": filter_effect = new FFTLowPassFilter(low_pass, frequency); break;
+			case "none": filter_effect = null;
+			default: filter_effect = null;
 		}
 	}
 	
@@ -78,5 +101,21 @@ public class EffectsController {
 			this.delay_feedback = 1;
 		else
 			this.delay_feedback = delay_feedback;
+	}
+
+	public double getLowPass() {
+		return low_pass;
+	}
+
+	public void setLowPass(double low_pass) {
+		this.low_pass = low_pass;
+	}
+
+	public double getFrequency() {
+		return frequency;
+	}
+
+	public void setFrequency(double frequency) {
+		this.frequency = frequency;
 	}
 }
