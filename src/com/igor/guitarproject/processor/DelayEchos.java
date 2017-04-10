@@ -16,14 +16,12 @@ public class DelayEchos {
 	}
 	
 	public short[] getEchos(short[] signal) {
-		if(delay_length != 0) {
-			for(int i = 0; i < signal.length; i++) {
-				processed_buffer[i] = delay_buffer[current_position];
-				delay_buffer[current_position] += signal[i];
-				delay_buffer[current_position] *= -delay_feedback;
-				current_position++;
-				current_position %= delay_length;
-			}
+		for(int i = 0; i < signal.length; i++) {
+			processed_buffer[i] = delay_buffer[current_position];
+			delay_buffer[current_position] += signal[i];
+			delay_buffer[current_position] *= -delay_feedback;
+			current_position++;
+			current_position %= delay_length;
 		}
 		
 		return processed_buffer;

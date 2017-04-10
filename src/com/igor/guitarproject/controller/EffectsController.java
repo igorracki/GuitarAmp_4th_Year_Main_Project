@@ -46,8 +46,8 @@ public class EffectsController {
 	}
 
 	public void setDrive(double drive) {
-		if(drive < 0)
-			this.drive = 0.0;
+		if(drive <= 0)
+			this.drive = 0.1;
 		else if(drive >= 1.0)
 			this.drive = 0.99;
 		else
@@ -59,8 +59,8 @@ public class EffectsController {
 	}
 
 	public void setDelayLength(int delay_length) {
-		if(delay_length < 0)
-			this.delay_length = 0;
+		if(delay_length <= 0)
+			this.delay_length = (Short.MAX_VALUE / 10) * 1;
 		else if(delay_length > 10)
 			this.delay_length = Short.MAX_VALUE;
 		else
