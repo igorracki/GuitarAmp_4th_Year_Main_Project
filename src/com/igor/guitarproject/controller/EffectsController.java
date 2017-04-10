@@ -60,9 +60,9 @@ public class EffectsController {
 
 	public void setDelayLength(int delay_length) {
 		if(delay_length < 0)
-			delay_length = 0;
+			this.delay_length = 0;
 		else if(delay_length > 10)
-			delay_length = Short.MAX_VALUE;
+			this.delay_length = Short.MAX_VALUE;
 		else
 			this.delay_length = (Short.MAX_VALUE / 10) * delay_length;
 	}
@@ -73,9 +73,9 @@ public class EffectsController {
 
 	public void setDelayFeedback(double delay_feedback) {
 		if(delay_feedback < 0)
-			delay_feedback = 0;
+			this.delay_feedback = 0;
 		else if(delay_feedback > 1)
-			delay_feedback = 1;
+			this.delay_feedback = 1;
 		else
 			this.delay_feedback = delay_feedback;
 	}
