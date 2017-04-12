@@ -5,10 +5,14 @@ import com.igor.guitarproject.main.TempUserInput;
 public class MainController {
 
 	private AudioController audio_c;
+	private GUIController gui_c;
+	
 	private TempUserInput user_input;
 	Thread user_input_thread;
 	
 	public MainController() {
+		gui_c = new GUIController(this);
+		
 		audio_c = new AudioController(this);
 		audio_c.startStream();
 		
