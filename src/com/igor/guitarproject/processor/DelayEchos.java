@@ -26,4 +26,9 @@ public class DelayEchos {
 		
 		return processed_buffer;
 	}
+	
+	public void updateValues(int delay_length, double delay_feedback) {
+		this.delay_length = delay_length;
+		this.delay_feedback = delay_feedback;
+	}
 }

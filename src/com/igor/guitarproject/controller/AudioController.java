@@ -40,6 +40,14 @@ public class AudioController {
 		mic_engine_thread = new Thread(mic_input_engine);
 		mic_engine_thread.start();
 	}
+	
+	public void stopStream() {
+		mic_input_engine.stopLine();
+		speaker_output_engine.stopLine();
+		
+		mic_engine_thread.interrupt();
+		mic_engine_thread = null;
+	}
 
 	/*********************** 	GETTERS & SETTERS 	***********************/
 	public MainController getMainController() {

@@ -37,6 +37,18 @@ public class EffectsController {
 		else
 			return true;
 	}
+	
+	public void updateFilter() {
+		filter_effect.updateValues(this.low_pass, this.frequency);
+	}
+	
+	public void updateOverdrive() {
+		current_effect.updateValues(this.drive, 0);
+	}
+	
+	public void updateDelay() {
+		current_effect.updateValues(this.delay_length, this.delay_feedback);
+	}
 
 	/*********************** 	GETTERS & SETTERS 	***********************/
 	public Effect getCurrentEffect() {

@@ -63,4 +63,11 @@ public class FFTLowPassFilter implements Effect {
 		
 		return filtered_signal;
 	}
+
+	@Override
+	public void updateValues(double value_one, double value_two) {
+		this.low_pass = value_one;
+		this.frequency = value_two;
+	}
+
 }

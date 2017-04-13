@@ -24,4 +24,9 @@ public class Overdrive implements Effect {
 		
 		return signal;
 	}
+
+	@Override
+	public void updateValues(double value_one, double value_two) {
+		this.drive = value_one;
+	}
 }

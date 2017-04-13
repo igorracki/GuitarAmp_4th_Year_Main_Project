@@ -19,6 +19,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.igor.guitarproject.controller.GUIController;
+
 import javax.swing.JSlider;
 
 public class MainGUI extends JFrame implements ActionListener, ChangeListener {
@@ -94,18 +97,21 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 	private int frame_height = 835;
 	
 	/******************************* 	Variables. 	************************************/
+	private GUIController gui_c;
+	
 	private boolean isAmpOn = false;
 	private boolean isFilterOn = false;
 	private String current_effect = "none";
 	private boolean isEffectOn = false;
 	
-	private double cutoff_frequency = 0;
-	private double frequency = 0;
-	private double drive = 0;
-	private int delay_length = 0;
-	private double delay_feedback = 0;
+	private double cutoff_frequency;
+	private double frequency;
+	private double drive;
+	private int delay_length;
+	private double delay_feedback;
 
-	public MainGUI() {
+	public MainGUI(GUIController gui_c) {
+		this.gui_c = gui_c;
 		/******************************* 	Top. 	************************************/
 		background_label.setIcon(bg_panel3);
 		background_label.setForeground(Color.WHITE);
@@ -336,6 +342,14 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 		setResizable(false);
 
 		refreshEffectsPanel();
+		
+		cutoff_frequency = (double)cutoff_slider.getValue();
+		frequency = (double)freq_slider.getValue();
+		drive = (double)drive_delayF_slider.getValue();
+		drive = drive / 10;
+		delay_length = (int)delayL_slider.getValue();
+		delay_feedback = (double)drive_delayF_slider.getValue();
+		delay_feedback = delay_feedback / 10;
 	}
 
 	/**
@@ -388,6 +402,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 				cutoff_value_label.setText("");
 				freq_value_label.setText("");
 				isAmpOn = false;
+				gui_c.buttonOff();
 			} else {
 				switch_button.setIcon(button_on);
 				on_led_label.setIcon(on_led);
@@ -397,6 +412,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 				filter_switch.setIcon(button_off2);
 				filter_switch.setEnabled(true);
 				isAmpOn = true;
+				gui_c.buttonOn();
 			}
 		}
 		
@@ -408,6 +424,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 				cutoff_value_label.setText("");
 				freq_value_label.setText("");
 				isFilterOn = false;
+				gui_c.stopFilter();
 			} else {
 				filter_switch.setIcon(button_on2);
 				cutoff_slider.setEnabled(true);
@@ -415,6 +432,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 				cutoff_value_label.setText("" + cutoff_slider.getValue());
 				freq_value_label.setText("" + freq_slider.getValue());
 				isFilterOn = true;
+				gui_c.startFilter(cutoff_frequency, frequency);
 			}
 		}
 		
@@ -423,10 +441,12 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 				current_effect = "overdrive";
 				delay_switch.setEnabled(false);
 				refreshEffectsPanel();
+				gui_c.startOverdrive(drive);
 			} else {
 				delay_switch.setEnabled(true);
 				current_effect = "none";
 				refreshEffectsPanel();
+				gui_c.stopEffect();
 			}
 		}
 		
@@ -435,10 +455,12 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 				current_effect = "delay";
 				overdrive_switch.setEnabled(false);
 				refreshEffectsPanel();
+				gui_c.startDelay(delay_length, delay_feedback);
 			} else {
 				overdrive_switch.setEnabled(true);
 				current_effect = "none";
 				refreshEffectsPanel();
+				gui_c.stopEffect();
 			}
 		}
 	}
@@ -454,6 +476,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 			if(!source.getValueIsAdjusting()) {
 				cutoff_frequency = (double)source.getValue();
 				cutoff_value_label.setText("" + (int)cutoff_frequency);
+				gui_c.updateFilter(cutoff_frequency, frequency);
 			}
 		}
 		
@@ -461,6 +484,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 			if(!source.getValueIsAdjusting()) {
 				frequency = (double)source.getValue();
 				freq_value_label.setText("" + (int)frequency);
+				gui_c.updateFilter(cutoff_frequency, frequency);
 			}
 		}
 		
@@ -470,10 +494,12 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 					delay_feedback = (double)(source.getValue());
 					delay_feedback = delay_feedback / 10;
 					drive_delayF_value_label.setText("" + (int)(delay_feedback * 10));
+					gui_c.updateDelay(delay_length, delay_feedback);
 				} else if(current_effect.equals("overdrive")) {
 					drive = (double)(source.getValue());
 					drive = drive / 10;
 					drive_delayF_value_label.setText("" + (int)(drive * 10));
+					gui_c.updateDrive(drive);
 				}
 			}
 		}
@@ -482,6 +508,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 			if(!source.getValueIsAdjusting()) {
 				delay_length = (int)source.getValue();
 				delayL_value_label.setText("" + delay_length);
+				gui_c.updateDelay(delay_length, delay_feedback);
 			}
 		}
 	}
