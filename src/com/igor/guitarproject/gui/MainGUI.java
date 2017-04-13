@@ -472,19 +472,21 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		JSlider source = (JSlider)e.getSource();
 		
-		if(source.equals(cutoff_slider)) {
-			if(!source.getValueIsAdjusting()) {
-				cutoff_frequency = (double)source.getValue();
-				cutoff_value_label.setText("" + (int)cutoff_frequency);
-				gui_c.updateFilter(cutoff_frequency, frequency);
+		if(isFilterOn) {
+			if(source.equals(cutoff_slider)) {
+				if(!source.getValueIsAdjusting()) {
+					cutoff_frequency = (double)source.getValue();
+					cutoff_value_label.setText("" + (int)cutoff_frequency);
+					gui_c.updateFilter(cutoff_frequency, frequency);
+				}
 			}
-		}
-		
-		if(source.equals(freq_slider)) {
-			if(!source.getValueIsAdjusting()) {
-				frequency = (double)source.getValue();
-				freq_value_label.setText("" + (int)frequency);
-				gui_c.updateFilter(cutoff_frequency, frequency);
+			
+			if(source.equals(freq_slider)) {
+				if(!source.getValueIsAdjusting()) {
+					frequency = (double)source.getValue();
+					freq_value_label.setText("" + (int)frequency);
+					gui_c.updateFilter(cutoff_frequency, frequency);
+				}
 			}
 		}
 		
