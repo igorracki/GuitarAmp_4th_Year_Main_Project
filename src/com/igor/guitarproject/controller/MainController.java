@@ -1,13 +1,21 @@
 package com.igor.guitarproject.controller;
 
+/**
+ * Class controlling other controllers.
+ * Executed by the main thread.
+ * @author Igor
+ *
+ */
 public class MainController {
 
 	private AudioController audio_c;
 	private GUIController gui_c;
 	
+	/**
+	 * Initialize controllers.
+	 */
 	public MainController() {
 		gui_c = new GUIController(this);
-		
 		audio_c = new AudioController(this);
 	}
 	

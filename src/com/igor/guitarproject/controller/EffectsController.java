@@ -5,6 +5,12 @@ import com.igor.guitarproject.processor.Effect;
 import com.igor.guitarproject.processor.FFTLowPassFilter;
 import com.igor.guitarproject.processor.Overdrive;
 
+/**
+ * Class controlling all available effects.
+ * 
+ * @author Igor
+ *
+ */
 public class EffectsController {
 
 	private AudioController audio_c;
@@ -24,6 +30,10 @@ public class EffectsController {
 		this.audio_c = audio_c;
 	}
 	
+	/**
+	 * Check if an effect is currently active.
+	 * @return boolean isEffectActive
+	 */
 	public boolean isEffectActive() {
 		if(current_effect == null)
 			return false;
@@ -31,6 +41,10 @@ public class EffectsController {
 			return true;
 	}
 	
+	/**
+	 * Check if a filter is currently active.
+	 * @return boolean isFilterActive
+	 */
 	public boolean isFilterActive() {
 		if(filter_effect == null)
 			return false;
@@ -38,14 +52,23 @@ public class EffectsController {
 			return true;
 	}
 	
+	/**
+	 * Update filter parameters.
+	 */
 	public void updateFilter() {
 		filter_effect.updateValues(this.low_pass, this.frequency);
 	}
 	
+	/**
+	 * Update overdrive effect parameters.
+	 */
 	public void updateOverdrive() {
 		current_effect.updateValues(this.drive, 0);
 	}
 	
+	/**
+	 * Update delay effect parameters.
+	 */
 	public void updateDelay() {
 		current_effect.updateValues(this.delay_length, this.delay_feedback);
 	}
@@ -59,6 +82,10 @@ public class EffectsController {
 		return filter_effect;
 	}
 	
+	/**
+	 * Set current effect based on the user input.
+	 * @param String effect
+	 */
 	public void setCurrentEffect(String effect) {
 		switch(effect) {
 			case "overdrive": current_effect = new Overdrive(drive); break;
@@ -68,6 +95,10 @@ public class EffectsController {
 		}
 	}
 	
+	/**
+	 * Set current filter based on the user input.
+	 * @param String filter
+	 */
 	public void setCurrentFilter(String filter) {
 		switch(filter) {
 			case "lowpass": filter_effect = new FFTLowPassFilter(low_pass, frequency); break;

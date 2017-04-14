@@ -3,19 +3,24 @@ package com.igor.guitarproject.controller;
 import com.igor.guitarproject.audio.MicrophoneInputEngine;
 import com.igor.guitarproject.audio.SpeakerOutputEngine;
 
+/**
+ * Class controlling both, microphone and speaker lines.
+ * 
+ * @author Igor
+ *
+ */
 public class AudioController {
 
 	private MainController main_c;
 	private EffectsController effects_c;
 	
-	// Audio Setup.
+	// Audio Engines Configuration.
 	private float sample_rate = 44100.0f;
 	private int sample_size_in_bits = 16;
 	private int channels = 1;
 	private boolean sign_data = true;
 	private boolean big_endian = false;
 	private int buffer_size = 4096;
-//	private int read_length = 2;
 	private int read_length = 408;
 	
 	// Audio Engines.
@@ -23,6 +28,11 @@ public class AudioController {
 	private SpeakerOutputEngine speaker_output_engine;
 	private Thread mic_engine_thread;
 	
+	/**
+	 * Initialize audio engines.
+	 * 
+	 * @param main_c
+	 */
 	public AudioController(MainController main_c) {
 		this.main_c = main_c;
 		
@@ -33,6 +43,9 @@ public class AudioController {
 		speaker_output_engine = new SpeakerOutputEngine(this, effects_c);
 	}
 	
+	/**
+	 * Start both lines and the I/O Thread.
+	 */
 	public void startStream() {
 		mic_input_engine.startLine();
 		speaker_output_engine.startLine();
@@ -41,6 +54,9 @@ public class AudioController {
 		mic_engine_thread.start();
 	}
 	
+	/**
+	 * Stop both lines and interrupt the I/O Thread.
+	 */
 	public void stopStream() {
 		mic_input_engine.stopLine();
 		speaker_output_engine.stopLine();

@@ -24,6 +24,11 @@ import com.igor.guitarproject.controller.GUIController;
 
 import javax.swing.JSlider;
 
+/**
+ * GUI Interface.
+ * @author Igor
+ *
+ */
 public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 	
 	private static final long serialVersionUID = 9137898017288735704L;

@@ -11,6 +11,12 @@ import javax.sound.sampled.SourceDataLine;
 import com.igor.guitarproject.controller.AudioController;
 import com.igor.guitarproject.controller.EffectsController;
 
+/**
+ * Class handling the output to the speaker Line-Out.
+ * 
+ * @author Igor
+ *
+ */
 public class SpeakerOutputEngine {
 
 	private AudioController audio_c;
@@ -18,6 +24,12 @@ public class SpeakerOutputEngine {
 	private SourceDataLine speaker_line;
 	private AudioFormat speaker_format;
 	
+	/**
+	 * Open the speaker line.
+	 * 
+	 * @param AudioController audio_c
+	 * @param EffectsController effects_c
+	 */
 	public SpeakerOutputEngine(AudioController audio_c, EffectsController effects_c) {
 		this.audio_c = audio_c;
 		this.effects_c = effects_c;
@@ -32,16 +44,25 @@ public class SpeakerOutputEngine {
 		}
 	}
 	
+	/**
+	 * Accessed by the I/O Thread to output the signal through Line-Out.
+	 * 
+	 * @param short[] signal	- 	Audio Samples.
+	 */
 	public void playSignal(short[] signal) {
-		
+		// Check if filter is activated. If so, apply filter to the signal.
 		if(effects_c.isFilterActive())
 			signal = effects_c.getCurrentFilter().applyEffect(signal);
 		
+		// Check if an effect is activated. If so, apply effect to the signal.
 		if(effects_c.isEffectActive())
 			signal = effects_c.getCurrentEffect().applyEffect(signal);
 		
+		// Prepare a buffer to be written out through the speaker line.
 		byte[] output_buffer = new byte[audio_c.getReadLength()];
 
+		// Convert Short audio samples into bytes.
+		// Two bytes make up one audio sample.
 		int i = 0;
 		while(i <= audio_c.getReadLength()-1) {
 			ByteBuffer bb = ByteBuffer.allocate(2);
@@ -52,14 +73,21 @@ public class SpeakerOutputEngine {
 			i += 2;
 		}
 		
+		// Output the signal through the speakers.
 		speaker_line.write(output_buffer, 0, output_buffer.length);
 	}
 	
+	/**
+	 * Start the speaker line.
+	 */
 	public void startLine() {
 		speaker_line.start();
 		System.out.println("Speakers Started.");
 	}
 	
+	/**
+	 * Close the speaker line.
+	 */
 	public void stopLine() {
 		speaker_line.drain();
 		speaker_line.close();
@@ -69,9 +97,5 @@ public class SpeakerOutputEngine {
 	/*********************** 	GETTERS & SETTERS 	***********************/
 	public SourceDataLine getSpeakerLine() {
 		return speaker_line;
-	}
-
-	public void setSpeakerLine(SourceDataLine speaker_line) {
-		this.speaker_line = speaker_line;
 	}
 }

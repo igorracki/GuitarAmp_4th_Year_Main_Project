@@ -1,13 +1,27 @@
 package com.igor.guitarproject.processor;
 
+/**
+ * Overdrive Effect.
+ * Distorts the input signal to create an overdriven sound.
+ * @author Igor
+ *
+ */
 public class Overdrive implements Effect {
 	
+	// Represents the clipping of the sound.
+	// Modifies the shape of the signal's wave. 
+	// Low drive values create soft-clipping, altering the wave to remain a distorted sinusoidal function.
+	// High drive values create hard-clipping, altering the wave to have sharp edges (square wave). 
 	private double drive;
 	
 	private double k;
 	private double a;
 	private double x;
 	
+	/**
+	 * Initialize the effect.
+	 * @param double drive
+	 */
 	public Overdrive(double drive) {
 		this.drive = drive;
 	}

@@ -5,11 +5,17 @@ import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
 
+/**
+ * Low Pass Filter.
+ * Implementation of Fast Fourier Transform to achieve Low-Pass filtering.
+ * @author Igor
+ *
+ */
 public class FFTLowPassFilter implements Effect {
 
-	// cutoff frequency
+	// The filter cutoff frequency.
 	private double low_pass;
-	// input frequency
+	// The input frequency of the signal.
 	private double frequency;
 	
 	public FFTLowPassFilter(double low_pass, double frequency) {
@@ -25,7 +31,7 @@ public class FFTLowPassFilter implements Effect {
 			min_power_of_2 = 2 * min_power_of_2;
 		}
 		
-		// Pad with zeros.
+		// Pad the signal with zeros.
 		double[] padding = new double[min_power_of_2];
 		for(int i = 0; i < signal.length; i++)
 			padding[i] = signal[i];
@@ -38,7 +44,8 @@ public class FFTLowPassFilter implements Effect {
 		for(int i = 0; i < frequency_domain.length; i++)
 			frequency_domain[i] = frequency * i / (double)fourier_transform.length;
 		
-		// Classifier array. 2s stay in, 0s are rejected by the filter.
+		// Classifier array. 
+		// Signal of value 2 remains, 0 is rejected by the filter.
 		double[] keep_signal = new double[frequency_domain.length];
 		keep_signal[0] = 1;
 		for(int i = 1; i < frequency_domain.length; i++) {
@@ -48,14 +55,14 @@ public class FFTLowPassFilter implements Effect {
 				keep_signal[i] = 0;
 		}
 		
-		// Filter the FFT.
+		// Filter the FFT signal.
 		for(int i = 0; i < fourier_transform.length; i++)
 			fourier_transform[i] = fourier_transform[i].multiply((double)keep_signal[i]);
 		
-		// Invert back to time domain.
+		// Convert back to time domain.
 		Complex[] reverse_fourier = transformer.transform(fourier_transform, TransformType.INVERSE);
 		
-		// Get the real data of the reverse.
+		// Store the real data of the signal in time domain.
 		short[] filtered_signal = new short[signal.length];
 		for(int i = 0; i < filtered_signal.length; i++) {
 			filtered_signal[i] = (short) reverse_fourier[i].getReal();
