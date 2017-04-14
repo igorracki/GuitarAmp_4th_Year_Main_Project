@@ -8,3 +8,6 @@ This project uses only the  **[Apache Commons Math 3.6.1](http://commons.apache.
 FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
 Complex[] fourier_transform = transformer.transform(padding, TransformType.FORWARD);
 ```
+
+## Application GUI Screenshot
+![alt-tag](https://cloud.githubusercontent.com/assets/26202076/25042791/9c394fa0-2112-11e7-9326-acceca25dca7.png)
