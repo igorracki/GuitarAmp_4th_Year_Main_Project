@@ -1,31 +1,18 @@
 package com.igor.guitarproject.controller;
 
-import java.awt.EventQueue;
-
 import com.igor.guitarproject.gui.MainGUI;
 
 public class GUIController {
 
 	private MainController main_c;
 
-	private GUIController this_c;
-	
 	private MainGUI frame;
 	
 	public GUIController(MainController main_c) {
 		this.main_c = main_c;
-		this.this_c = this;
 		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frame = new MainGUI(this_c);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		frame = new MainGUI(this);
+		frame.setVisible(true);
 	}
 	
 	public void buttonOn() {
