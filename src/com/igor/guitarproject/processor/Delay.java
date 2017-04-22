@@ -17,7 +17,7 @@ public class Delay implements Effect {
 	
 	private short[] delayed_signal;
 	private short[] processed_signal = new short[204];
-	private int current_position;
+	private int delay_position;
 	
 	/**
 	 * Initialize the effect.
@@ -38,11 +38,11 @@ public class Delay implements Effect {
 	@Override
 	public short[] applyEffect(short[] signal) {
 		for(int i = 0; i < signal.length; i++) {
-			processed_signal[i] = delayed_signal[current_position];
-			delayed_signal[current_position] += signal[i];
-			delayed_signal[current_position] *= -delay_feedback;
-			current_position++;
-			current_position %= delay_length;
+			processed_signal[i] = delayed_signal[delay_position];
+			delayed_signal[delay_position] += signal[i];
+			delayed_signal[delay_position] *= -delay_feedback;
+			delay_position++;
+			delay_position %= delay_length;
 		}
 
 		return processed_signal;
