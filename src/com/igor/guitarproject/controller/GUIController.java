@@ -11,6 +11,7 @@ public class GUIController {
 
 	private MainController main_c;
 	private MainGUI frame;
+	private int counter = 0;
 	
 	/**
 	 * Initialize the GUI.
@@ -21,6 +22,16 @@ public class GUIController {
 		
 		frame = new MainGUI(this);
 		frame.setVisible(true);
+	}
+	
+	/**
+	 * Notify the GUI to become active when interface lines are open.
+	 */
+	public void lineOpened() {
+		counter++;
+		
+		if(counter == 2)
+			frame.linesOpened();
 	}
 	
 	/**

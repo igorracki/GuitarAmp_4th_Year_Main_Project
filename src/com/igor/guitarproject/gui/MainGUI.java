@@ -81,6 +81,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 	private JLabel delayL_value_label = new JLabel("");
 	private JLabel footer_text_label = new JLabel("Igor Racki - B00068103 @ Institute of Technology Blanchardstown");
 	private JLabel footer_backgroud_label = new JLabel("");
+	private JLabel init_text_label = new JLabel("");
 	
 	/******************************* 	Buttons. 	************************************/
 	private JButton switch_button = new JButton("");
@@ -146,6 +147,14 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 		switch_button.setIcon(button_off);
 		switch_button.addActionListener(this);
 		switch_button.setBounds(12, 83, 73, 75);
+		switch_button.setEnabled(false);
+		
+		init_text_label.setHorizontalAlignment(SwingConstants.CENTER);
+		init_text_label.setFont(new Font("Tahoma", Font.BOLD, 13));
+		init_text_label.setForeground(new Color(255, 140, 0));
+		init_text_label.setBounds(108, 110, 271, 29);
+		init_text_label.setText("Opening Line Interfaces. Please Wait...");
+		main_panel.add(init_text_label);
 		
 		/******************************* 	Status. 	************************************/
 		status_box_label.setBackground(Color.BLACK);
@@ -184,9 +193,6 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 		cutoff_slider.setForeground(Color.ORANGE);
 		cutoff_slider.setBackground(new Color(192, 192, 192));
 		cutoff_slider.addChangeListener(this);
-		cutoff_slider.setMinimum(10);
-		cutoff_slider.setMaximum(10000);
-		cutoff_slider.setValue(500);
 		cutoff_slider.setBounds(93, 29, 290, 25);
 		
 		cutoff_value_label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -200,8 +206,6 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 		frequency_text_label.setBounds(12, 71, 69, 16);
 		
 		freq_slider.setBackground(new Color(192, 192, 192));
-		freq_slider.setMaximum(10000);
-		freq_slider.setValue(5000);
 		freq_slider.setBounds(93, 66, 290, 26);
 		freq_slider.addChangeListener(this);
 		
@@ -213,6 +217,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 		filter_switch.setBounds(456, 12, 85, 80);
 		filter_switch.setIcon(button_off2);
 		filter_switch.addActionListener(this);
+		filter_switch.setEnabled(false);
 		
 		filter_panel.setBounds(12, 176, 555, 100);
 		filter_panel.setLayout(null);
@@ -347,6 +352,7 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 		setResizable(false);
 
 		refreshEffectsPanel();
+		refreshFilterParameters();
 		
 		cutoff_frequency = (double)cutoff_slider.getValue();
 		frequency = (double)freq_slider.getValue();
@@ -385,6 +391,40 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 		}
 	}
 	
+	/**
+	 * Refreshes the filter parameters based on current effect applied.
+	 */
+	public void refreshFilterParameters() {
+		if(!isEffectOn) {
+			cutoff_slider.setMinimum(10);
+			cutoff_slider.setMaximum(300);
+			cutoff_slider.setValue(150);
+			
+			freq_slider.setMinimum(0);
+			freq_slider.setMaximum(1000);
+			freq_slider.setValue(1000);
+		} else {
+			if(current_effect.equals("overdrive")) {
+				cutoff_slider.setMinimum(10);
+				cutoff_slider.setMaximum(500);
+				cutoff_slider.setValue(40);
+				
+				freq_slider.setMinimum(0);
+				freq_slider.setMaximum(3000);
+				freq_slider.setValue(500);
+			}
+			
+			if(current_effect.equals("delay")) {
+				cutoff_slider.setMinimum(10);
+				cutoff_slider.setMaximum(300);
+				cutoff_slider.setValue(150);
+				
+				freq_slider.setMinimum(0);
+				freq_slider.setMaximum(1000);
+				freq_slider.setValue(1000);
+			}
+		}
+	}
 	/**
 	 * ActionListener for buttons.
 	 */
@@ -444,12 +484,16 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 		if(e.getSource().equals(overdrive_switch)) {
 			if(current_effect.equals("none")) {
 				current_effect = "overdrive";
-				delay_switch.setEnabled(false);
+				isEffectOn = true;
+				refreshFilterParameters();
 				refreshEffectsPanel();
+				delay_switch.setEnabled(false);
 				gui_c.startOverdrive(drive);
 			} else {
 				delay_switch.setEnabled(true);
 				current_effect = "none";
+				isEffectOn = false;
+				refreshFilterParameters();
 				refreshEffectsPanel();
 				gui_c.stopEffect();
 			}
@@ -458,12 +502,16 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 		if(e.getSource().equals(delay_switch)) {
 			if(current_effect.equals("none")) {
 				current_effect = "delay";
-				overdrive_switch.setEnabled(false);
+				isEffectOn = true;
+				refreshFilterParameters();
 				refreshEffectsPanel();
+				overdrive_switch.setEnabled(false);
 				gui_c.startDelay(delay_length, delay_feedback);
 			} else {
 				overdrive_switch.setEnabled(true);
 				current_effect = "none";
+				isEffectOn = false;
+				refreshFilterParameters();
 				refreshEffectsPanel();
 				gui_c.stopEffect();
 			}
@@ -518,5 +566,14 @@ public class MainGUI extends JFrame implements ActionListener, ChangeListener {
 				gui_c.updateDelay(delay_length, delay_feedback);
 			}
 		}
+	}
+	
+	/**
+	 * Activates the gui.
+	 */
+	public void linesOpened() {
+		switch_button.setEnabled(true);
+		init_text_label.setText("Lines Opened Successfully!");
+		init_text_label.setForeground(Color.GREEN);
 	}
 }

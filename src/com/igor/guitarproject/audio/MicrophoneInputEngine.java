@@ -39,6 +39,7 @@ public class MicrophoneInputEngine implements Runnable {
 			microphone_line = AudioSystem.getTargetDataLine(microphone_format);
 			microphone_line.open(microphone_format, audio_c.getBufferSize());
 			System.out.println("Microphone Line Opened.");
+			audio_c.getMainController().getGuiC().lineOpened();
 			
 			read_length = audio_c.getReadLength();
 			data = new byte[read_length];

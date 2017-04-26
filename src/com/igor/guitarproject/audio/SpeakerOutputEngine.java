@@ -39,6 +39,7 @@ public class SpeakerOutputEngine {
 			speaker_line = AudioSystem.getSourceDataLine(speaker_format);
 			speaker_line.open(speaker_format, audio_c.getBufferSize());
 			System.out.println("Speaker Line Opened.");
+			audio_c.getMainController().getGuiC().lineOpened();
 		} catch (LineUnavailableException e) {
 			System.out.println("Speaker Line Unavailable!");
 		}

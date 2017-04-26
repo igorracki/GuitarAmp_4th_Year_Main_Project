@@ -29,4 +29,7 @@ public class MainController {
 		this.audio_c = audio_c;
 	}
 	
+	public GUIController getGuiC() {
+		return gui_c;
+	}
 }
